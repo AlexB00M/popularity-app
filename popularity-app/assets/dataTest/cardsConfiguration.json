@@ -1,0 +1,170 @@
+{
+    "Free" : {
+        "levels" : {
+            "1": {
+                "cardsCountUpLevel": "5",
+                "color": "green"
+            },
+            "2": {
+                "cardsCountUpLevel": "10",
+                "color": "red"
+            },
+            "3": {
+                "cardsCountUpLevel": "20",
+                "color": "blue"
+            },
+            "4": {
+                "cardsCountUpLevel": "50",
+                "color": "orange"
+            },
+            "5": {
+                "cardsCountUpLevel": "100",
+                "color": "gold"
+            }
+        },
+        "pointsPerOne": "100",
+        "url": "https://lottie.host/d83e3457-b97f-470e-8f64-e3d8f4f81900/RS4VTEVItT.lottie",
+        "cost": "5",
+        "chance": "100"
+    },
+    "Car" : {
+        "levels" : {
+            "1": {
+                "cardsCountUpLevel": "5",
+                "color": "green"
+            },
+            "2": {
+                "cardsCountUpLevel": "10",
+                "color": "red"
+            },
+            "3": {
+                "cardsCountUpLevel": "20",
+                "color": "blue"
+            },
+            "4": {
+                "cardsCountUpLevel": "50",
+                "color": "orange"
+            },
+            "5": {
+                "cardsCountUpLevel": "100",
+                "color": "gold"
+            }
+        },
+        "pointsPerOne": "200",
+        "url": "https://lottie.host/d83e3457-b97f-470e-8f64-e3d8f4f81900/RS4VTEVItT.lottie",
+        "cost": "10",
+        "chance": "80"
+    },
+    "Orange" : {
+        "levels" : {
+            "1": {
+                "cardsCountUpLevel": "5",
+                "color": "green"
+            },
+            "2": {
+                "cardsCountUpLevel": "10",
+                "color": "red"
+            },
+            "3": {
+                "cardsCountUpLevel": "20",
+                "color": "blue"
+            },
+            "4": {
+                "cardsCountUpLevel": "50",
+                "color": "orange"
+            },
+            "5": {
+                "cardsCountUpLevel": "100",
+                "color": "gold"
+            }
+        },
+        "pointsPerOne": "25000",
+        "url": "https://lottie.host/8ac177ec-f6f7-4095-8237-5853fedcc542/5ts0QD5zVS.lottie",
+        "cost": "1000",
+        "chance": "4"
+    },
+    "Girl" : {
+        "levels" : {
+            "1": {
+                "cardsCountUpLevel": "5",
+                "color": "green"
+            },
+            "2": {
+                "cardsCountUpLevel": "10",
+                "color": "red"
+            },
+            "3": {
+                "cardsCountUpLevel": "20",
+                "color": "blue"
+            },
+            "4": {
+                "cardsCountUpLevel": "50",
+                "color": "orange"
+            },
+            "5": {
+                "cardsCountUpLevel": "100",
+                "color": "gold"
+            }
+        },
+        "pointsPerOne": "2000",
+        "url": "https://lottie.host/8ac177ec-f6f7-4095-8237-5853fedcc542/5ts0QD5zVS.lottie",
+        "cost": "100",
+        "chance": "40"
+    },
+    "Plane" : {
+        "levels" : {
+            "1": {
+                "cardsCountUpLevel": "5",
+                "color": "green"
+            },
+            "2": {
+                "cardsCountUpLevel": "10",
+                "color": "red"
+            },
+            "3": {
+                "cardsCountUpLevel": "20",
+                "color": "blue"
+            },
+            "4": {
+                "cardsCountUpLevel": "50",
+                "color": "orange"
+            },
+            "5": {
+                "cardsCountUpLevel": "100",
+                "color": "gold"
+            }
+        },
+        "pointsPerOne": "267000",
+        "url": "https://lottie.host/8ac177ec-f6f7-4095-8237-5853fedcc542/5ts0QD5zVS.lottie",
+        "cost": "8888",
+        "chance": "0.2"
+    },
+    "Flit" : {
+        "levels" : {
+            "1": {
+                "cardsCountUpLevel": "5",
+                "color": "green"
+            },
+            "2": {
+                "cardsCountUpLevel": "10",
+                "color": "red"
+            },
+            "3": {
+                "cardsCountUpLevel": "20",
+                "color": "blue"
+            },
+            "4": {
+                "cardsCountUpLevel": "50",
+                "color": "orange"
+            },
+            "5": {
+                "cardsCountUpLevel": "100",
+                "color": "gold"
+            }
+        },
+        "pointsPerOne": "300000",
+        "url": "https://lottie.host/8ac177ec-f6f7-4095-8237-5853fedcc542/5ts0QD5zVS.lottie",
+        "cost": "9999",
+        "chance": "0.13"
+    }
+}

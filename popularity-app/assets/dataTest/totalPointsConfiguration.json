@@ -1,0 +1,22 @@
+{
+    "1": {
+        "pointsUpLevel": "10000",
+        "color": "green"
+    },
+    "2": {
+        "pointsUpLevel": "300000",
+        "color": "red"
+    },
+    "3": {
+        "pointsUpLevel": "600000",
+        "color": "blue"
+    },
+    "4": {
+        "pointsUpLevel": "900000",
+        "color": "orange"
+    },
+    "5": {
+        "pointsUpLevel": "10000000",
+        "color": "gold"
+    }
+}
