@@ -1,12 +1,16 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken
 from init_data_py import InitData
 from django.conf import settings
 from .models import User
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserLeaderboardSerializer
+from rest_framework.exceptions import NotFound
+import math
+from rest_framework_simplejwt.authentication import JWTAuthentication
+import requests
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class TelegramTokenView(APIView):
     permission_classes = [AllowAny] 
@@ -48,8 +52,59 @@ class TelegramTokenView(APIView):
             'refresh': str(refresh),
         }
 
-class ProfileView(APIView):
+class UserGiftsView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        user = request.user
+        
+        user_name = user.user_name
+        user_gifts = requests.get(f'{settings.TELEGRAM_API_URL}/user_gifts/pambolovl', headers=settings.TELEGRAM_API_HEADERS)
+
+        return Response(user_gifts) 
+
+class LeaderboardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, page):
+        limit = 50
+
+        total_users = User.objects.count()
+        total_pages = math.ceil(total_users / limit)
+
+        if page < 1 or page > total_pages:
+            raise NotFound(f"Страница {page} не существует. Доступные страницы: 1 - {total_pages}")
+
+        offset = (page - 1) * limit
+        users = User.objects.order_by("-total_popularity")[offset:offset + limit]
+        serializer = UserLeaderboardSerializer(users, many=True)
+        
+        data = []
+        start_rank = offset + 1
+        for i, user_data in enumerate(serializer.data):
+            user_data['rank'] = start_rank + i
+            data.append(user_data)
+
+        return Response({
+            "page": page,
+            "total_pages": total_pages,
+            "total_users": total_users,
+            "data": data
+        })
+
+class UserRankView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return Response({"message": f"Hello, {request.user}"})
+        try:
+            user = request.user
+        except User.DoesNotExist:
+            return Response({"detail": "Пользователь не найден."}, status=status.HTTP_404_NOT_FOUND)
+
+        higher_count = User.objects.filter(total_popularity__gt=user.total_popularity).count()
+        rank = higher_count + 1
+
+        return Response({
+            "rank": rank,
+            "total_popularity": user.total_popularity
+        })

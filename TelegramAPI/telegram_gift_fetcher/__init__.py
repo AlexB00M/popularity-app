@@ -5,6 +5,11 @@ from telethon import TelegramClient
 from telethon.tl.types import InputUser
 from .tl_objects import GetUserStarGifts
 from .scraper import get_unique_gift_average_price
+import tempfile
+import os 
+import lottie
+from telethon.tl.types import Document, MessageEntityCustomEmoji, StarGiftAttributeModel, StarGiftAttributePattern, StarGiftAttributeBackdrop, StarGiftAttributeOriginalDetails
+import base64
 
 async def _resolve_username(client: TelegramClient, username: str) -> Optional[tuple]:
     """
@@ -47,31 +52,6 @@ async def get_user_gifts(client: TelegramClient, username: str, offset: str = ""
     request = GetUserStarGifts(user_id=user, offset=offset, limit=limit)
     response = await client(request)
 
-    # print("Общее количество подарков:", response.count)
-
-    # for user_gift in response.gifts:
-    #     print("--- Подарок ---")
-    #     print("Тип подарка:", user_gift.gift.__class__.__name__)
-    #     print("Дата получения:", user_gift.date)
-    #     print("ID сообщения:", user_gift.msg_id)
-    #     print("Скрыто ли имя отправителя:", user_gift.name_hidden)
-    #     print("Отправитель:", user_gift.from_id)
-    #     print("Текст сообщения:", user_gift.message)
-        
-    #     # Вложенный подарок
-    #     gift = user_gift.gift
-    #     print("ID подарка:", gift.id)
-
-    #     if gift.CONSTRUCTOR_ID == 0x5c62d151:  # StarGiftUnique
-    #         print("Название:", gift.title)
-    #         print("Slug:", gift.slug)
-    #         print("Выпущено:", gift.availability_issued)
-    #         print("Всего:", gift.availability_total)
-    #     elif gift.CONSTRUCTOR_ID == 0x2cc73c8:  # StarGift
-    #         print("Количество звезд:", gift.stars)
-    #         print("Конвертация в звезды:", gift.convert_stars)
-
-
     filtered_gifts = []
     filtered_gifts_unique = []
 
@@ -113,21 +93,131 @@ async def get_user_gifts(client: TelegramClient, username: str, offset: str = ""
         "gifts_unique": filtered_gifts_unique,
     }
 
-async def get_more_info_unique_gift(client: TelegramClient, unique_gifts: list): 
-    result = []
-    for unique_gift in unique_gifts:
-        if unique_gift.type == 'StarGiftUnique':
-            request = await client(functions.payments.GetUniqueStarGiftRequest(
-                slug=unique_gift.slug
-            ))
-            model = None
-            for attr in request.gift.attributes:
-                if hasattr(attr, 'name'):
-                    model = attr.name
-                    break
-            gift_with_model = unique_gift.dict()
-            if model:
-                gift_with_model["model"] = model
-            result.append(gift_with_model)
+async def get_lottie_animation_json(client, doc):
+    with tempfile.NamedTemporaryFile(suffix=".tgs", delete=False) as tmp_file:
+        temp_filename = tmp_file.name
+    try:
+        result = await client.download_media(doc, file=temp_filename)
+        if doc.mime_type == "application/x-tgsticker":
+            print(f"Стикер временно сохранён как: {temp_filename}")
+            
+            lottie_animation_json = lottie.parsers.tgs.parse_tgs_json(temp_filename, encoding="utf-8")
+            return {"data": lottie_animation_json, "is_animated": True}
+        elif doc.mime_type == "image/webp":
+            with open(temp_filename, "rb") as f:
+                image_bytes = f.read()
+                image_base64 = base64.b64encode(image_bytes).decode("utf-8")
 
-    return result
+            return {"data": image_base64, "is_animated": False}
+    finally:
+        if os.path.exists(temp_filename):
+            os.remove(temp_filename)
+            print(f"Временный файл {temp_filename} удалён")
+
+
+async def get_lottie_animations_emoji(client, entities):
+    emojis_temp = [
+        {
+            "offset": entity.offset,
+            "length": entity.length,
+            "document_id": entity.document_id
+        }
+        for entity in entities
+        if isinstance(entity, MessageEntityCustomEmoji)
+    ]
+
+    docs = await client(functions.messages.GetCustomEmojiDocumentsRequest(
+        document_id=[e["document_id"] for e in emojis_temp]
+    ))
+
+    emojis = []
+    for emoji_data, doc in zip(emojis_temp, docs):
+        image_base64 = await get_lottie_animation_json(client, doc)
+        emojis.append({
+            "offset": emoji_data["offset"],
+            "length": emoji_data["length"],
+            "document_id": doc.id,
+            "is_animated": image_base64["is_animated"],
+            "image": image_base64["data"]
+        })
+
+    return emojis
+
+async def process_unique_gift(client, unique_gift):
+    request = await client(functions.payments.GetUniqueStarGiftRequest(slug=unique_gift.slug))
+
+    gift_data = unique_gift.dict()
+
+    doc = None
+
+    model = None
+    pattern = None
+    backdrop = None
+
+    sender_id = None
+    message_text = None
+
+    emojis = []
+    # print(request.gift) # посмотреть message_id
+    for attr in request.gift.attributes:
+        if isinstance(attr, StarGiftAttributeModel):
+            model = attr.name
+            doc = attr.document  # если нужно сохранить document, можно сделать отдельно model_doc = attr.document
+        elif isinstance(attr, StarGiftAttributePattern):
+            pattern = attr.name
+        elif isinstance(attr, StarGiftAttributeBackdrop):
+            backdrop = attr.name
+        elif isinstance(attr, StarGiftAttributeOriginalDetails):
+            sender_id = attr.sender_id.user_id
+            message_text = attr.message.text
+            entities = attr.message.entities
+            emojis = await get_lottie_animations_emoji(client, entities)
+
+
+    if model:
+        gift_data["model"] = model
+    if pattern:
+        gift_data["pattern"] = pattern
+    if backdrop:
+        gift_data["backdrop"] = backdrop
+    if sender_id:
+        gift_data['sender_id'] = sender_id
+    if message_text:
+        gift_data['message_text'] = message_text
+        if emojis:
+            gift_data['emojis'] = emojis
+
+    tasks = []
+    
+    if doc and isinstance(doc, Document):
+        tasks.append(get_lottie_animation_json(client, doc))
+
+    if gift_data['average_price'] is None:
+        tasks.append(get_unique_gift_average_price(gift_data))
+
+    results = await asyncio.gather(*tasks)
+
+    i = 0
+    if doc and isinstance(doc, Document):
+        gift_data['lottie_animation_json'] = results[i]["data"]
+        i += 1
+
+    if gift_data['average_price'] is None:
+        gift_data['average_price'] = results[i]
+
+    return gift_data
+
+semaphore = asyncio.Semaphore(20)
+
+async def process_unique_gift_limited(client, gift):
+    async with semaphore:
+        return await process_unique_gift(client, gift)
+
+async def get_more_info_unique_gift(client, unique_gifts):
+    tasks = [
+        process_unique_gift_limited(client, gift)
+        for gift in unique_gifts
+        if gift.type == 'StarGiftUnique'
+    ]
+    results = await asyncio.gather(*tasks)
+    return [res for res in results if res is not None]

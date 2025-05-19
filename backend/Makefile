@@ -80,3 +80,7 @@ django-console:
 .PHONY: pip-install
 pip-install:
 	${EXEC} ${APP_CONTAINER} pip install $(name)
+
+.PHONY: test
+test:
+	${EXEC} ${APP_CONTAINER} ${MANAGE_PY} test ${name}

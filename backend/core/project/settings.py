@@ -15,6 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
 import environ
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -48,16 +49,18 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_json_widget',
     # 'rest_framework_simplejwt.token_blacklist',
+    'django_celery_beat',
 
     'core.apps.user',
     'core.apps.user.social',
-
     'core.apps.roulette',
 
     'core.apps.items.card',
-    'core.apps.items.gift',
+    'core.apps.items.starGift',
     'core.apps.items.nft',
-    'core.apps.items.giftUnique'
+    'core.apps.items.starGiftUnique',
+    'core.apps.items.emoji',
+    'core.apps.items.message'
 ]
 
 REST_FRAMEWORK = {
@@ -159,8 +162,23 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN')
+API_TELEGRAM_SECRET_TOKEN =  env('API_TELEGRAM_SECRET_TOKEN')
+TELEGRAM_API_HOST = env('TELEGRAM_API_HOST')
+TELEGRAM_API_PORT = env('TELEGRAM_API_PORT')
+TELEGRAM_API_URL = f'http://{TELEGRAM_API_HOST}:{TELEGRAM_API_PORT}'
+TELEGRAM_API_HEADERS = {
+    'Authorization': f"Bearer {API_TELEGRAM_SECRET_TOKEN}"
+}
 
 AUTH_USER_MODEL = 'user.User'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CELERY_TASK_ALWAYS_EAGER = True
+CELERY_BROKER_URL = 'memory://'

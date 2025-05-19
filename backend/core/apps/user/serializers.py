@@ -5,3 +5,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+
+class UserLeaderboardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("telegram_id", "user_name", "total_popularity", "photo_url")

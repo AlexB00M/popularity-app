@@ -1,9 +1,15 @@
 from django.contrib import admin
 from django.urls import path, include
-from core.apps.user.views import ProfileView
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/profile/', ProfileView.as_view(), name='profile_view'),
+    path("api/admin-panel/", include("core.apps.items.starGift.urls")),
     path('api/auth/', include('core.auth_views.jwt_urls')),
+    path("api/user/", include("core.apps.user.urls")),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -46,3 +46,14 @@ class UserCard(models.Model):
     def clean(self):
         if self.user_sender and self.user == self.user_sender:
             raise ValidationError("Пользователь не может отправить подарок сам себе.")
+        
+
+class TransactionCard(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
+    count = models.PositiveIntegerField()
+
+    card = models.ForeignKey(Card, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.name
