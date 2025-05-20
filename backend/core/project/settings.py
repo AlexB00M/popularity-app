@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'core.apps.user',
     'core.apps.user.social',
     'core.apps.roulette',
+    'core.apps.configuration',
 
     'core.apps.items.card',
     'core.apps.items.starGift',
@@ -122,6 +123,17 @@ DATABASES = {
     }
 }
 
+REDIS_URL = f"redis://{env('REDIS_USER')}:{env('REDIS_USER_PASSWORD')}@{env('REDIS_HOST')}:{env('REDIS_PORT')}/1"
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -143,14 +155,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
@@ -164,11 +175,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-
 TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN')
 API_TELEGRAM_SECRET_TOKEN =  env('API_TELEGRAM_SECRET_TOKEN')
 TELEGRAM_API_HOST = env('TELEGRAM_API_HOST')
 TELEGRAM_API_PORT = env('TELEGRAM_API_PORT')
+
 TELEGRAM_API_URL = f'http://{TELEGRAM_API_HOST}:{TELEGRAM_API_PORT}'
 TELEGRAM_API_HEADERS = {
     'Authorization': f"Bearer {API_TELEGRAM_SECRET_TOKEN}"
@@ -180,5 +191,6 @@ AUTH_USER_MODEL = 'user.User'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-CELERY_TASK_ALWAYS_EAGER = True
-CELERY_BROKER_URL = 'memory://'
+CELERY_TASK_ALWAYS_EAGER = False
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL

@@ -1,0 +1,25 @@
+
+services:
+  celery-worker-1:
+    build: ../
+    container_name: worker-1
+    command: celery -A core.project worker --loglevel=info --concurrency=${WORKER_CONCURRENCY}
+    depends_on:
+      - main-app
+      - redis
+      - postgres
+    volumes:
+      - ..:/app/
+    user: "1000:1000"
+
+  celery-worker-2:
+    build: ../
+    container_name: worker-2
+    command: celery -A core.project worker --loglevel=info --concurrency=${WORKER_CONCURRENCY}
+    depends_on:
+      - main-app
+      - redis
+      - postgres
+    volumes:
+      - ..:/app/
+    user: "1000:1000"

@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: false },
   devServer: {
-    host: "192.168.1.8", // Сюда свой ip 
+    host: "192.168.1.6", // Сюда свой ip 
     port: "3000"
   },
   css: [

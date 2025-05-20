@@ -8,10 +8,16 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import UserSerializer, UserLeaderboardSerializer
 from rest_framework.exceptions import NotFound
 import math
-from rest_framework_simplejwt.authentication import JWTAuthentication
 import requests
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.core.cache import cache
+from core.apps.items.starGift.models import UserStarGift
+from core.apps.items.starGiftUnique.models import UserStarGiftUnique
+from core.apps.user.tasks import update_telegram_star_gifts, update_telegram_star_gifts_unique
+from core.apps.items.starGift.serializers import StarGiftSerializer, UserStarGiftSerializer
+from core.apps.items.starGiftUnique.serializers import StarGiftUniqueSerializer, UserStarGiftUniqueSerializer
 
+#/api/auth/telegram/ POST
 class TelegramTokenView(APIView):
     permission_classes = [AllowAny] 
 
@@ -51,47 +57,78 @@ class TelegramTokenView(APIView):
             'access': str(refresh.access_token),
             'refresh': str(refresh),
         }
-
+    
+#/api/users/user_gifts/ GET
 class UserGiftsView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny] # Поменять IsAuthenticated
     
     def get(self, request):
         user = request.user
+        print('aaaa')
+        user_star_gifts = UserStarGift.objects.filter(user=user)
+        user_star_gifts_unique = UserStarGiftUnique.objects.filter(user=user)
         
-        user_name = user.user_name
-        user_gifts = requests.get(f'{settings.TELEGRAM_API_URL}/user_gifts/pambolovl', headers=settings.TELEGRAM_API_HEADERS)
+        serialized_gifts = UserStarGiftSerializer(user_star_gifts, many=True).data
+        serialized_unique_gifts = UserStarGiftUniqueSerializer(user_star_gifts_unique, many=True).data
 
-        return Response(user_gifts) 
+        print(serialized_gifts)
+        print(serialized_unique_gifts)
 
+        response = requests.get(
+            f'{settings.TELEGRAM_API_URL}/user_gifts/pam',
+            headers=settings.TELEGRAM_API_HEADERS
+        )
+
+        if response.status_code == 200:
+            user_gifts_telegram = response.json()
+
+            telegram_gifts = user_gifts_telegram["gifts"]
+            telegram_unique_gifts = user_gifts_telegram["gifts_unique"]
+
+            
+        
+        return Response("Обновление подарков запущено")
+    
+#/api/users/leaderboard/<page>/ GET
 class LeaderboardView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny] # Поменять IsAuthenticated
 
     def get(self, request, page):
-        limit = 50
+        cache_key = f"leaderboard_page_{page}"
+        cached_data = cache.get(cache_key)
 
-        total_users = User.objects.count()
-        total_pages = math.ceil(total_users / limit)
+        if cached_data is not None:
+            print('Закешированную отдал')
+            return Response(cached_data)
+        else:
+            limit = 50
+            total_users = User.objects.count()
+            total_pages = math.ceil(total_users / limit)
 
-        if page < 1 or page > total_pages:
-            raise NotFound(f"Страница {page} не существует. Доступные страницы: 1 - {total_pages}")
+            if page < 1 or page > total_pages:
+                raise NotFound(f"Страница {page} не существует. Доступные страницы: 1 - {total_pages}")
 
-        offset = (page - 1) * limit
-        users = User.objects.order_by("-total_popularity")[offset:offset + limit]
-        serializer = UserLeaderboardSerializer(users, many=True)
-        
-        data = []
-        start_rank = offset + 1
-        for i, user_data in enumerate(serializer.data):
-            user_data['rank'] = start_rank + i
-            data.append(user_data)
+            offset = (page - 1) * limit
+            users = User.objects.order_by("-total_popularity")[offset:offset + limit]
+            serializer = UserLeaderboardSerializer(users, many=True)
 
-        return Response({
-            "page": page,
-            "total_pages": total_pages,
-            "total_users": total_users,
-            "data": data
-        })
+            data = []
+            start_rank = offset + 1
+            for i, user_data in enumerate(serializer.data):
+                user_data['rank'] = start_rank + i
+                data.append(user_data)
 
+            data_for_cache = {
+                "page": page,
+                "total_pages": total_pages,
+                "total_users": total_users,
+                "data": data
+            }
+            cache.set(cache_key, data_for_cache, timeout=30) 
+
+            return Response(data_for_cache)
+
+#/api/users/user_rank/ GET
 class UserRankView(APIView):
     permission_classes = [IsAuthenticated]
 

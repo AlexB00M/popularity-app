@@ -3,7 +3,6 @@ from core.apps.user.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
 from django.utils import timezone
-from django.core.exceptions import ValidationError
 from core.apps.items.message.models import Message
 
 class StarGiftUnique(models.Model):
@@ -33,27 +32,26 @@ class StarGiftUnique(models.Model):
 
 class UserStarGiftUnique(models.Model):
     # UserCard data
-    title = models.CharField(max_length=100, blank=True, null=True)
     slug = models.CharField(max_length=100) 
-    num = models.PositiveIntegerField(blank=True, null=True)
-    model = models.CharField(max_length=100, blank=True, null=True)
+    num = models.PositiveIntegerField()
     pattern = models.CharField(max_length=100)
     backdrop = models.CharField(max_length=100)
 
     received_date = models.DateTimeField(default=timezone.now)
     get_from_app = models.BooleanField(default=False)
 
-    lottie_animation_json = models.JSONField(blank=True, null=True) 
+    lottie_animation_json = models.JSONField() 
     lottie_animation_url = models.URLField(max_length=200, blank=True, null=True)
 
     # Сomparison with tables
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_star_gifts_unique')
-    star_gift_unique = models.ForeignKey(StarGiftUnique, on_delete=models.CASCADE, related_name='received_by_users')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='star_gift_unique')
+    star_gift_unique = models.OneToOneField(StarGiftUnique, on_delete=models.CASCADE, related_name='user')
     sender_id = models.BigIntegerField(blank=True, null=True)
-    message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='star_gift_messages')
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='star_gift_messages', blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Users StarGiftsUnique"
+        unique_together = ('user', 'star_gift_unique') 
 
     def __str__(self):
-        return f'{self.user.user_name} — {self.slug} | {self.title} {self.model} {self.pattern} {self.backdrop}'
+        return f'{self.user.user_name} — {self.slug} | {self.star_gift_unique.title} {self.star_gift_unique.model} {self.pattern} {self.backdrop}'

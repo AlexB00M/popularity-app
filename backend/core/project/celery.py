@@ -1,7 +1,14 @@
+import os
 from celery import Celery
 
-app = Celery('project')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.project.settings')
+
+app = Celery('core.project')
 
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-app.autodiscover_tasks()
+app.autodiscover_tasks(['core.apps.items'])
+
+@app.task(bind=True, ignore_result=True)
+def debug_task(self):
+    print(f'Request: {self.request!r}')

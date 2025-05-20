@@ -7,7 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/admin-panel/", include("core.apps.items.starGift.urls")),
     path('api/auth/', include('core.auth_views.jwt_urls')),
-    path("api/user/", include("core.apps.user.urls")),
+    path("api/users/", include("core.apps.user.urls")),
 ]
 
 

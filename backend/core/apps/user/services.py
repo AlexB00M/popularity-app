@@ -6,7 +6,6 @@ from core.apps.items.starGiftUnique.models import UserStarGiftUnique
 
 def calculate_user_popularity(telegram_id):
     user = User.objects.get(telegram_id=telegram_id)
-
     gifts_popularity = UserStarGift.objects.filter(user=user).aggregate(
         total=Sum('star_gift__popularity_add')
     )['total'] or 0
