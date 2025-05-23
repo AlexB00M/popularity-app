@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'core.apps.user.social',
     'core.apps.roulette',
     'core.apps.configuration',
+    'core.apps.exception',
+    'core.apps.giftsLogs',
 
     'core.apps.items.card',
     'core.apps.items.starGift',
@@ -166,7 +168,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -194,3 +197,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CELERY_TASK_ALWAYS_EAGER = False
 CELERY_BROKER_URL = REDIS_URL
 CELERY_RESULT_BACKEND = REDIS_URL
+

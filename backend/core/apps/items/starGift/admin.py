@@ -78,14 +78,9 @@ class StarGiftAdmin(admin.ModelAdmin):
     
 @admin.register(UserStarGift)
 class UserStarGiftAdmin(admin.ModelAdmin):
-    list_display = ('user', 'star_gift', 'get_star_gift_popularity','received_date', 'get_from_app', 'sender_id')
+    list_display = ('user', 'star_gift', 'star_gift__popularity_add', 'received_date', 'get_from_app', 'sender_id')
     list_filter = ('user',)
-    search_fields = ('user__user_name', 'gift__name')
+    search_fields = ('user__user_name', 'star_gift__name', 'star_gift__id')
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget(options={'theme': 'dark'})},
     }
-
-    def get_star_gift_popularity(self, obj):
-        return obj.star_gift.popularity_add
-
-    get_star_gift_popularity.short_description = 'Popularity_add'

@@ -12,7 +12,7 @@
 <script setup>
 
 onMounted(() => {
-  fetch('http://localhost:8000/api/user/leaderboard/1', {
+  fetch('http://localhost:8000/api/users/leaderboard/1', {
     method: 'GET',
     headers: {
         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,

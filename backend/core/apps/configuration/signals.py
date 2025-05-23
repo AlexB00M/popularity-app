@@ -8,7 +8,7 @@ from django.db.models import F
 from core.apps.user.tasks import update_user_popularity_task
 
 @receiver(post_save, sender=PopularityConfig)
-def update_popularity_add_on_config_change(sender, instance, **kwargs):
+def update_popularity_add_on_config_change(sender, instance, created, **kwargs):
     popularity_per_star = instance.popularity_per_star
     popularity_per_ton = instance.popularity_per_ton
 

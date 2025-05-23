@@ -30,3 +30,5 @@ class CeleryTaskTestCase(TestCase):
         # user.refresh_from_db()
         print(f"Популярность после: {user.total_popularity}")
         self.assertEqual(user.total_popularity, 4000)
+
+

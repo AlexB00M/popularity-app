@@ -35,6 +35,14 @@ redis-logs:
 app:
 	${DC} -f ${APP_FILE} -f ${STORAGES_FILE} -f ${WORKERS_FILE} ${ENV} up --build -d
 
+.PHONY: workers
+workers:
+	${DC} -f ${WORKERS_FILE} ${ENV} up --build -d
+
+.PHONY: workers-down
+workers-down:
+	${DC} -f ${WORKERS_FILE} ${ENV} down
+
 .PHONY: worker-1-logs
 worker-1-logs:
 	${LOGS} -f worker-1 -f

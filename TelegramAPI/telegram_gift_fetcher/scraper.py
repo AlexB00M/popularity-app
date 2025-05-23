@@ -13,7 +13,7 @@ async def get_unique_gift_price(session: aiohttp.ClientSession, url: str) -> flo
             return float(price)
         except Exception as e:
             print(e)
-            return 'Not found'
+            return 'Average price not found'
 
 def build_fragment_url(title: str, model: str, sort: str) -> str: # sort= price_asc/price_desc
     base_url = "https://fragment.com/gifts"
@@ -44,13 +44,13 @@ async def get_unique_gift_average_price(unique_gift_data: dict) -> Optional[floa
             max_price_poc  = get_unique_gift_price(session, url_desc)
 
             min_price, max_price = await asyncio.gather(min_price_poc, max_price_poc)
-            if min_price != 'Not found' or max_price != 'Not found':
+            if min_price != 'Average price not found' or max_price != 'Average price not found':
                 average_price = (max_price + min_price)/2
                 print(f'{unique_gift_data['title']} | {unique_gift_data['model']} | Max_price - {max_price} | Min_price = {min_price} | Average - {average_price}')
 
                 return average_price
             else:
-                return 'Not found'
+                return 'Average price not found'
     except Exception as e:
         print(f'Error getting gift collection floor price: {e}')
         return None

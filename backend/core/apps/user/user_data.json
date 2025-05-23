@@ -1,0 +1,280 @@
+{
+    "gifts": [
+        {
+            "type": "StarGift",
+            "id": 5830323722413671504,
+            "stars": 100,
+            "convert_stars": 85,
+            "sender_id": 5547201569,
+            "received_date": 1746737007
+        },
+        {
+            "type": "StarGift",
+            "id": 5832325860073407546,
+            "stars": 150,
+            "convert_stars": 128,
+            "sender_id": 5547201569,
+            "received_date": 1746736807
+        },
+        {
+            "type": "StarGift",
+            "id": 5807641025165919973,
+            "stars": 100,
+            "convert_stars": 85,
+            "sender_id": 5547201569,
+            "received_date": 1746081132
+        },
+        {
+            "type": "StarGift",
+            "id": 5773791997064119815,
+            "stars": 75,
+            "convert_stars": 64,
+            "sender_id": 5547201569,
+            "received_date": 1745087815
+        },
+        {
+            "type": "StarGift",
+            "id": 5170233102089322756,
+            "stars": 15,
+            "convert_stars": 13,
+            "sender_id": 5547201569,
+            "received_date": 1744872259
+        },
+        {
+            "type": "StarGift",
+            "id": 5170250947678437525,
+            "stars": 25,
+            "convert_stars": 21,
+            "sender_id": 5547201569,
+            "received_date": 1744659413
+        },
+        {
+            "type": "StarGift",
+            "id": 6042113507581755979,
+            "stars": 200,
+            "convert_stars": 170,
+            "sender_id": 5547201569,
+            "received_date": 1744533214
+        },
+        {
+            "type": "StarGift",
+            "id": 5170233102089322756,
+            "stars": 15,
+            "convert_stars": 13,
+            "sender_id": 5547201569,
+            "received_date": 1744483035
+        },
+        {
+            "type": "StarGift",
+            "id": 5170690322832818290,
+            "stars": 100,
+            "convert_stars": 85,
+            "sender_id": 5547201569,
+            "received_date": 1744482861
+        },
+        {
+            "type": "StarGift",
+            "id": 5170233102089322756,
+            "stars": 15,
+            "convert_stars": 13,
+            "sender_id": 5547201569,
+            "received_date": 1743663079
+        },
+        {
+            "type": "StarGift",
+            "id": 5170145012310081615,
+            "stars": 15,
+            "convert_stars": 13,
+            "sender_id": 5547201569,
+            "received_date": 1743483092
+        },
+        {
+            "type": "StarGift",
+            "id": 5170145012310081615,
+            "stars": 15,
+            "convert_stars": 13,
+            "sender_id": 5547201569,
+            "received_date": 1743483080
+        },
+        {
+            "type": "StarGift",
+            "id": 5170145012310081615,
+            "stars": 15,
+            "convert_stars": 13,
+            "sender_id": 5547201569,
+            "received_date": 1743483064
+        },
+        {
+            "type": "StarGift",
+            "id": 6006064678835323371,
+            "stars": 100,
+            "convert_stars": 85,
+            "sender_id": 5547201569,
+            "received_date": 1743478292
+        },
+        {
+            "type": "StarGift",
+            "id": 6005564615793050414,
+            "stars": 50,
+            "convert_stars": 43,
+            "sender_id": 5547201569,
+            "received_date": 1743478250
+        },
+        {
+            "type": "StarGift",
+            "id": 5170145012310081615,
+            "stars": 15,
+            "convert_stars": 13,
+            "sender_id": 5547201569,
+            "received_date": 1742296866
+        },
+        {
+            "type": "StarGift",
+            "id": 5960747083030856414,
+            "stars": 100,
+            "convert_stars": 85,
+            "sender_id": 5547201569,
+            "received_date": 1742158031
+        },
+        {
+            "type": "StarGift",
+            "id": 5913351908466098791,
+            "stars": 100,
+            "convert_stars": 85,
+            "sender_id": 5547201569,
+            "received_date": 1740778490
+        },
+        {
+            "type": "StarGift",
+            "id": 5895603153683874485,
+            "stars": 100,
+            "convert_stars": 85,
+            "sender_id": 5547201569,
+            "received_date": 1740310417
+        },
+        {
+            "type": "StarGift",
+            "id": 5170145012310081615,
+            "stars": 15,
+            "convert_stars": 13,
+            "sender_id": 5547201569,
+            "received_date": 1739579806
+        },
+        {
+            "type": "StarGift",
+            "id": 5870784783948186838,
+            "stars": 200,
+            "convert_stars": 170,
+            "sender_id": 5547201569,
+            "received_date": 1739517223
+        },
+        {
+            "type": "StarGift",
+            "id": 5170145012310081615,
+            "stars": 15,
+            "convert_stars": 13,
+            "sender_id": 5547201569,
+            "received_date": 1739269405
+        },
+        {
+            "type": "StarGift",
+            "id": 5170250947678437525,
+            "stars": 25,
+            "convert_stars": 21,
+            "sender_id": 5547201569,
+            "received_date": 1739267297
+        },
+        {
+            "type": "StarGift",
+            "id": 5170145012310081615,
+            "stars": 15,
+            "convert_stars": 13,
+            "sender_id": 5547201569,
+            "received_date": 1739223852
+        },
+        {
+            "type": "StarGift",
+            "id": 5170233102089322756,
+            "stars": 15,
+            "convert_stars": 13,
+            "sender_id": 5547201569,
+            "received_date": 1738145172
+        },
+        {
+            "type": "StarGift",
+            "id": 5170145012310081615,
+            "stars": 15,
+            "convert_stars": 13,
+            "sender_id": 5547201569,
+            "received_date": 1734430992
+        }
+    ],
+    "gifts_unique": [
+        {
+            "type": "StarGiftUnique",
+            "id": 5870747391962907459,
+            "title": "Cookie Heart",
+            "model": "Choco Chips",
+            "slug": "CookieHeart-53927",
+            "num": 53927,
+            "availability_issued": 112821,
+            "availability_total": 264486,
+            "received_date": 1744138643
+        },
+        {
+            "type": "StarGiftUnique",
+            "id": 5850234086991331783,
+            "title": "Lol Pop",
+            "model": "Heart Pop",
+            "slug": "LolPop-134739",
+            "num": 134739,
+            "availability_issued": 342956,
+            "availability_total": 468745,
+            "received_date": 1744738572
+        },
+        {
+            "type": "StarGiftUnique",
+            "id": 5778402172009972527,
+            "title": "Easter Egg",
+            "model": "Protein Lamp",
+            "slug": "EasterEgg-46057",
+            "num": 46057,
+            "availability_issued": 145670,
+            "availability_total": 173176,
+            "received_date": 1745226709
+        },
+        {
+            "type": "StarGiftUnique",
+            "id": 5861844113736860809,
+            "title": "Desk Calendar",
+            "model": "May",
+            "slug": "DeskCalendar-99246",
+            "num": 99246,
+            "availability_issued": 320377,
+            "availability_total": 374077,
+            "received_date": 1746794654
+        },
+        {
+            "type": "StarGiftUnique",
+            "id": 5861844113736860802,
+            "title": "Desk Calendar",
+            "model": "May",
+            "slug": "DeskCalendar-99246",
+            "num": 99246,
+            "availability_issued": 320377,
+            "availability_total": 374077,
+            "received_date": 1746794654
+        },
+        {
+            "type": "StarGiftUnique",
+            "id": 5846180973598737122,
+            "title": "Snake Box",
+            "model": "Honey Bee",
+            "slug": "SnakeBox-1105",
+            "num": 1105,
+            "availability_issued": 45762,
+            "availability_total": 273898,
+            "received_date": 1735597320
+        }
+    ]
+}

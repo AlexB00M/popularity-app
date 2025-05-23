@@ -4,7 +4,7 @@ from typing import Optional, Dict
 from telethon import TelegramClient
 from telethon.tl.types import InputUser
 from .tl_objects import GetUserStarGifts
-from .scraper import get_unique_gift_average_price
+from .scraper import get_unique_gift_average_price 
 import tempfile
 import os 
 import lottie
@@ -55,6 +55,7 @@ async def get_user_gifts(client: TelegramClient, username: str, offset: str = ""
     filtered_gifts = []
     filtered_gifts_unique = []
 
+
     # Process each gift
     for user_gift in response.gifts:
         gift = user_gift.gift
@@ -71,12 +72,17 @@ async def get_user_gifts(client: TelegramClient, username: str, offset: str = ""
             }
             filtered_gifts.append(gift_data)
         elif gift.CONSTRUCTOR_ID == 0x5c62d151:  # StarGiftUnique
-            collection_slug = gift.title.lower().replace(' ', '')
-            # floor_price = floor_price_dict.get(collection_slug)
+            request = await client(functions.payments.GetUniqueStarGiftRequest(slug=gift.slug))
+            model = ''
+            for attr in request.gift.attributes:
+                if isinstance(attr, StarGiftAttributeModel):
+                    model = attr.name
+
             gift_data = {
                 "type": "StarGiftUnique",
                 "id": gift.id,
                 "title": gift.title,
+                "model": model,
                 "slug": gift.slug,
                 "num": gift.num,
                 # "collection_floor_price_in_ton": floor_price,
@@ -145,7 +151,6 @@ async def get_lottie_animations_emoji(client, entities):
 
 async def process_unique_gift(client, unique_gift):
     request = await client(functions.payments.GetUniqueStarGiftRequest(slug=unique_gift.slug))
-
     gift_data = unique_gift.dict()
 
     doc = None
@@ -173,7 +178,6 @@ async def process_unique_gift(client, unique_gift):
             entities = attr.message.entities
             emojis = await get_lottie_animations_emoji(client, entities)
 
-
     if model:
         gift_data["model"] = model
     if pattern:
@@ -199,7 +203,7 @@ async def process_unique_gift(client, unique_gift):
 
     i = 0
     if doc and isinstance(doc, Document):
-        gift_data['lottie_animation_json'] = results[i]["data"]
+        gift_data['lottie_animation_json'] = {}#results[i]["data"]
         i += 1
 
     if gift_data['average_price'] is None:
@@ -217,7 +221,6 @@ async def get_more_info_unique_gift(client, unique_gifts):
     tasks = [
         process_unique_gift_limited(client, gift)
         for gift in unique_gifts
-        if gift.type == 'StarGiftUnique'
     ]
     results = await asyncio.gather(*tasks)
     return [res for res in results if res is not None]

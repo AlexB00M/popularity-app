@@ -9,10 +9,10 @@ class StarGift(models.Model):
     # Gift data
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=100, blank=True, null=True)
-    lottie_animation_json = models.JSONField(blank=False, null=False)  # Сюда загружается JSON-анимация Lottie
+    lottie_animation_json = models.JSONField(blank=True, null=True)  # Сюда загружается JSON-анимация Lottie
     lottie_animation_url = models.URLField(max_length=200, blank=True, null=True)
     popularity_add = models.PositiveIntegerField(blank=True, null=True)
-    price = models.PositiveIntegerField(blank=False, null=False)
+    price = models.PositiveIntegerField(blank=True, null=True)
     convert_stars = models.PositiveIntegerField(blank=True, null=True)
     sold_out = models.BooleanField(blank=True, null=True)
     drop_chance = models.DecimalField(
@@ -39,8 +39,8 @@ class UserStarGift(models.Model):
     get_from_app = models.BooleanField(default=False)
 
     # Сomparison with tables
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='star_gifts')
-    star_gift = models.ForeignKey(StarGift, on_delete=models.CASCADE,  related_name='users')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_star_gifts')
+    star_gift = models.ForeignKey(StarGift, on_delete=models.CASCADE,  related_name='user_star_gifts')
     sender_id = models.BigIntegerField(blank=True, null=True)
 
     class Meta:

@@ -69,21 +69,23 @@ async def user_gifts(username: str):
 
 
 class UniqueGift(BaseModel):
-    type: str
-    id: int
     title: str
     slug: str
-    num: int
-    availability_issued: int
-    availability_total: int
-    received_date: int
     average_price: Optional[Union[str, int]] = None
-
 @app.post("/get_more_info_unique_gifts")
 async def get_more_info_unique_gifts(unique_gifts: List[UniqueGift]):
     unique_gifts_data = await get_more_info_unique_gift(client, unique_gifts) 
 
     return unique_gifts_data
+
+
+class UniqueGiftAVG(BaseModel):
+    title: str
+    model: str
+@app.post("/unique_gift_average_price")
+async def get_more_info_unique_gifts(unique_gift: UniqueGiftAVG):
+    resonse = await get_unique_gift_average_price(dict(unique_gift))
+    return resonse
 
 
 @app.get("/get_telegram_gifts")
@@ -104,7 +106,7 @@ async def get_telegram_gifts():
         if isinstance(doc, Document):
             filename = f"telegram_animations/gifts/{gift.id}_AnimatedSticker.tgs"
             if not os.path.exists(filename):
-                await client.download_media(doc, file=filename)
+                await client.download_media(doc, file=filename) 
                 print(f"Стикер сохранён как: {filename}")
 
             lottie_animation_json = await get_lottie_animation_json(client, doc)
